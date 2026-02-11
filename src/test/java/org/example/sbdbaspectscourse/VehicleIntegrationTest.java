@@ -7,10 +7,13 @@ import org.example.sbdbaspectscourse.repository.VehicleRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -20,10 +23,11 @@ import org.testcontainers.utility.DockerImageName;
 import java.util.List;
 import java.util.TimeZone;
 
-@SpringBootTest
+@DataJpaTest
 @Testcontainers
 @ActiveProfiles("test")
-@Transactional
+@Import(VehicleJdbcDao.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class VehicleIntegrationTest {
 
     static {
@@ -82,5 +86,17 @@ class VehicleIntegrationTest {
 
         Vehicle updatedVehicle = vehicleRepository.findById(vehicleId).orElseThrow();
         Assertions.assertEquals(newStatus, updatedVehicle.getStatus(), "Status in database must change");
+    }
+
+    @Test
+    @Sql(scripts = "/extra_data.sql")
+    void testLoadDataWithSqlAnnotation() {
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        boolean hasBatmobile = vehicles.stream()
+                .filter(v -> v instanceof Car)
+                .map(v -> (Car) v)
+                .anyMatch(car -> "Batmobile".equals(car.getModel()));
+
+        Assertions.assertTrue(hasBatmobile, "Data should be loaded using @Sql");
     }
 }

@@ -1,0 +1,2 @@
+INSERT INTO vehicles (license_plate, status, vehicle_type) VALUES ('SPECIAL-01', 'AVAILABLE', 'CAR');
+INSERT INTO cars (vehicle_id, model, trunk_capacity) VALUES ((SELECT id FROM vehicles WHERE license_plate = 'SPECIAL-01'), 'Batmobile', 1000.0);
