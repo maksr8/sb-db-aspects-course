@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "b5936720-1234-4567-8901-abcdef123456",
+		"name": "Taxi API Lab",
+		"description": "Collection for testing Vehicle API (Car & Scooter) with JDBC and Validation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Create Car (Valid)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"licensePlate\": \"AA1234BI\",\n    \"status\": \"AVAILABLE\",\n    \"model\": \"Toyota Camry\",\n    \"trunkCapacity\": 450.0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vehicles/car",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"car"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Create Scooter (Valid)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"licensePlate\": \"SCOOT-77\",\n    \"status\": \"AVAILABLE\",\n    \"batteryLevel\": 95,\n    \"maxSpeed\": 25\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vehicles/scooter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"scooter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Create Car (Validation Error Test)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"licensePlate\": \"\",\n    \"status\": \"\",\n    \"model\": \"\",\n    \"trunkCapacity\": -50.0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vehicles/car",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"car"
+					]
+				},
+				"description": "This request SHOULD FAIL with 400 Bad Request because fields are empty and capacity is negative."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get All Vehicles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vehicles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Get By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vehicles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. Update Car (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"licensePlate\": \"AA1234BI\",\n    \"status\": \"BUSY\",\n    \"model\": \"Toyota Camry V70\",\n    \"trunkCapacity\": 450.0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vehicles/car/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"car",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Update Status (JDBC Param)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vehicles/1/status?status=ON_REPAIR",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"1",
+						"status"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "ON_REPAIR"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. Get All Plates (JDBC)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vehicles/plates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"plates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9. Get Cars Detailed (JDBC Join)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vehicles/cars-jdbc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"cars-jdbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10. Delete Vehicle",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vehicles/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vehicles",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
