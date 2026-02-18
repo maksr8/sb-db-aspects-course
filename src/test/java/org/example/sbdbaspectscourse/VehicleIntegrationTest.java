@@ -2,6 +2,7 @@ package org.example.sbdbaspectscourse;
 
 import org.example.sbdbaspectscourse.dao.VehicleJdbcDao;
 import org.example.sbdbaspectscourse.model.Car;
+import org.example.sbdbaspectscourse.model.Scooter;
 import org.example.sbdbaspectscourse.model.Vehicle;
 import org.example.sbdbaspectscourse.repository.VehicleRepository;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -98,5 +98,39 @@ class VehicleIntegrationTest {
                 .anyMatch(car -> "Batmobile".equals(car.getModel()));
 
         Assertions.assertTrue(hasBatmobile, "Data should be loaded using @Sql");
+    }
+
+    @Test
+    void testNativeScooterJoin() {
+        List<Scooter> scooters = vehicleRepository.findAllScootersNative();
+
+        Assertions.assertFalse(scooters.isEmpty(), "There should be at least one scooter from native query");
+
+        Scooter targetScooter = scooters.stream()
+                .filter(s -> "SCOOT-99".equals(s.getLicensePlate()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Scooter with plate SCOOT-99 should be present"));
+
+        Assertions.assertEquals("FREE", targetScooter.getStatus());
+
+        Assertions.assertEquals(85, targetScooter.getBatteryLevel(), "Battery level should be 85");
+        Assertions.assertEquals(25, targetScooter.getMaxSpeed(), "Max speed should be 25");
+    }
+
+    @Test
+    void testNativeCarJoin() {  
+        List<Car> cars = vehicleRepository.findAllCarsNative();
+
+        Assertions.assertFalse(cars.isEmpty(), "There should be at least one car from native query");
+
+        Car targetCar = cars.stream()
+                .filter(c -> "AA1234BB".equals(c.getLicensePlate()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Car with plate AA1234BB should be present"));
+
+        Assertions.assertEquals("AVAILABLE", targetCar.getStatus());
+
+        Assertions.assertEquals("Toyota Camry", targetCar.getModel());
+        Assertions.assertEquals(500.0, targetCar.getTrunkCapacity(), 0.001);
     }
 }
