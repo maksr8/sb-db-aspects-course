@@ -14,8 +14,9 @@ import lombok.ToString;
 @DiscriminatorValue("CAR")
 public class Car extends Vehicle {
 
+    @Column(nullable = false)
     private String model;
 
-    @Column(name = "trunk_capacity")
+    @Column(name = "trunk_capacity", nullable = false)
     private Double trunkCapacity;
 }

@@ -11,43 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
-import java.util.TimeZone;
 
 @DataJpaTest
 @Testcontainers
-@ActiveProfiles("test")
 @Import(VehicleJdbcDao.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class VehicleIntegrationTest {
-
-    static {
-        System.setProperty("user.timezone", "UTC");
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:16"));
-
+class VehicleIntegrationTest extends AbstractTestcontainersSetupTest {
     @Autowired
     private VehicleJdbcDao vehicleJdbcDao;
     @Autowired
     private VehicleRepository vehicleRepository;
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
 
     @Test
     void testSqlDataLoadingAndJdbcQuery() {
@@ -118,7 +95,7 @@ class VehicleIntegrationTest {
     }
 
     @Test
-    void testNativeCarJoin() {  
+    void testNativeCarJoin() {
         List<Car> cars = vehicleRepository.findAllCarsNative();
 
         Assertions.assertFalse(cars.isEmpty(), "There should be at least one car from native query");

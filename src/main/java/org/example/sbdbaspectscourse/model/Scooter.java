@@ -14,9 +14,9 @@ import lombok.ToString;
 @DiscriminatorValue("SCOOTER")
 public class Scooter extends Vehicle {
 
-    @Column(name = "battery_level")
+    @Column(name = "battery_level", nullable = false)
     private Integer batteryLevel;
 
-    @Column(name = "max_speed")
+    @Column(name = "max_speed", nullable = false)
     private Integer maxSpeed;
 }

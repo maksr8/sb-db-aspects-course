@@ -25,10 +25,10 @@ public class VehicleJdbcDao {
 
     public List<Car> findAllCarsDetailed() {
         String sql = """
-            SELECT v.id, v.license_plate, v.status, c.model, c.trunk_capacity 
-            FROM vehicles v 
-            JOIN cars c ON v.id = c.vehicle_id
-        """;
+                    SELECT v.id, v.license_plate, v.status, c.model, c.trunk_capacity
+                    FROM vehicles v
+                    JOIN cars c ON v.id = c.vehicle_id
+                """;
 
         RowMapper<Car> rowMapper = (rs, rowNum) -> {
             Car car = new Car();
