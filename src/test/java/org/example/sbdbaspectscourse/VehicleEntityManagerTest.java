@@ -11,7 +11,6 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(VehicleEntityManagerDao.class)
 class VehicleEntityManagerTest extends AbstractTestcontainersSetupTest {
     @Autowired

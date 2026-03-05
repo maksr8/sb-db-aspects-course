@@ -4,11 +4,11 @@ import org.jooq.DSLContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.jooq.test.autoconfigure.JooqTest;
 
 import static org.example.sbdbaspectscourse.jooq.Tables.VEHICLES;
 
-@SpringBootTest
+@JooqTest
 class JooqSetupTest extends AbstractTestcontainersSetupTest {
 
     @Autowired

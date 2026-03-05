@@ -19,7 +19,6 @@ import java.util.List;
 @DataJpaTest
 @Testcontainers
 @Import(VehicleJdbcDao.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class VehicleIntegrationTest extends AbstractTestcontainersSetupTest {
     @Autowired
     private VehicleJdbcDao vehicleJdbcDao;

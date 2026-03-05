@@ -19,7 +19,6 @@ import java.util.List;
 
 @DataJpaTest
 @AutoConfigureJooq
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(AdvancedQueryDao.class)
 class AdvancedQueryDaoTest extends AbstractTestcontainersSetupTest {
 

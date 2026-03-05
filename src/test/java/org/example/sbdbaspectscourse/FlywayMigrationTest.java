@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class FlywayMigrationTest extends AbstractTestcontainersSetupTest {
 
     @Autowired
