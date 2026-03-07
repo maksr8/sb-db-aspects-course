@@ -1,0 +1,1 @@
+CREATE INDEX idx_cars_trunk_capacity ON cars (trunk_capacity);

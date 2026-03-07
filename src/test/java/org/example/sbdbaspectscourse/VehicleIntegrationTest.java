@@ -9,8 +9,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -24,6 +25,9 @@ class VehicleIntegrationTest extends AbstractTestcontainersSetupTest {
     private VehicleJdbcDao vehicleJdbcDao;
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void testSqlDataLoadingAndJdbcQuery() {
@@ -108,5 +112,48 @@ class VehicleIntegrationTest extends AbstractTestcontainersSetupTest {
 
         Assertions.assertEquals("Toyota Camry", targetCar.getModel());
         Assertions.assertEquals(500.0, targetCar.getTrunkCapacity(), 0.001);
+    }
+
+    @Test
+    void testUniqueLicensePlateConstraint() {
+        Car firstCar = new Car();
+        firstCar.setLicensePlate("UNIQUE-123");
+        firstCar.setStatus("AVAILABLE");
+        firstCar.setModel("Test Model");
+        firstCar.setTrunkCapacity(500.0);
+
+        vehicleRepository.saveAndFlush(firstCar);
+
+        Car secondCar = new Car();
+        secondCar.setLicensePlate("UNIQUE-123");
+        secondCar.setStatus("BUSY");
+        secondCar.setModel("Another Model");
+        secondCar.setTrunkCapacity(300.0);
+
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+            vehicleRepository.saveAndFlush(secondCar);
+        });
+    }
+
+    @Test
+    void testUniqueLicensePlateIndexExists() {
+        Integer indexCount = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM pg_indexes WHERE tablename = 'vehicles' AND indexname = 'uk_vehicles_license_plate'",
+                Integer.class
+        );
+
+        Assertions.assertNotNull(indexCount);
+        Assertions.assertEquals(1, indexCount);
+    }
+
+    @Test
+    void testTrunkCapacityIndexExists() {
+        Integer indexCount = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM pg_indexes WHERE tablename = 'cars' AND indexname = 'idx_cars_trunk_capacity'",
+                Integer.class
+        );
+
+        Assertions.assertNotNull(indexCount);
+        Assertions.assertEquals(1, indexCount);
     }
 }

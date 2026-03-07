@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.UUID;
 
-public class SyncReplicationTest extends AbstractClusterTestcontainersSetupTest{
+public class SyncReplicationTest extends AbstractClusterTestcontainersSetupTest {
 
     private static HikariDataSource primaryDataSource;
     private static HikariDataSource replicaDataSource;

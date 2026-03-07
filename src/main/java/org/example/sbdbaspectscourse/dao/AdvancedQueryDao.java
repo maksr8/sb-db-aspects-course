@@ -15,7 +15,10 @@ import org.jooq.impl.DSL;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.example.sbdbaspectscourse.jooq.Tables.*;
 import static org.jooq.impl.DSL.avg;

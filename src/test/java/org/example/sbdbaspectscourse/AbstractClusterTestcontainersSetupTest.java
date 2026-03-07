@@ -53,7 +53,7 @@ public abstract class AbstractClusterTestcontainersSetupTest {
         waitForDatabase(replica.getHost(), replica.getMappedPort(5432));
 
         String primaryUrl = String.format("jdbc:postgresql://%s:%d/taxi_db", primary.getHost(), primary.getMappedPort(5432));
-        
+
         Flyway flyway = Flyway.configure()
                 .dataSource(primaryUrl, "postgres", "root")
                 .locations("classpath:db/migration")

@@ -34,6 +34,15 @@ services:
     volumes:
       - replica_data:/bitnami/postgresql
 
+  mongodb:
+    image: mongo:8.2
+    container_name: taxi_mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+
 volumes:
   primary_data:
   replica_data:
+  mongo_data:

@@ -1,8 +1,8 @@
 package org.example.sbdbaspectscourse.repository;
 
+import org.example.sbdbaspectscourse.model.Car;
 import org.example.sbdbaspectscourse.model.Scooter;
 import org.example.sbdbaspectscourse.model.Vehicle;
-import org.example.sbdbaspectscourse.model.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

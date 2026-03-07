@@ -34,11 +34,11 @@ public class PostgresMaxConnectionsPerformanceImpactTest {
                 .waitingFor(Wait.forListeningPort());
 
              GenericContainer<?> optimalDb = new GenericContainer<>("postgres:18.3")
-                .withExposedPorts(5432)
-                .withEnv("POSTGRES_USER", "postgres")
-                .withEnv("POSTGRES_PASSWORD", "root")
-                .withEnv("POSTGRES_DB", "taxi_db")
-                .waitingFor(Wait.forListeningPort())) {
+                     .withExposedPorts(5432)
+                     .withEnv("POSTGRES_USER", "postgres")
+                     .withEnv("POSTGRES_PASSWORD", "root")
+                     .withEnv("POSTGRES_DB", "taxi_db")
+                     .waitingFor(Wait.forListeningPort())) {
 
             bottleneckDb.start();
             optimalDb.start();
