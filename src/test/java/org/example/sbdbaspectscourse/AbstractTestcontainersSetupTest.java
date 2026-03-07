@@ -20,12 +20,20 @@ abstract class AbstractTestcontainersSetupTest {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
     @Container
-    static PostgreSQLContainer postgres = new PostgreSQLContainer(DockerImageName.parse("postgres:18"));
+    static PostgreSQLContainer postgres = new PostgreSQLContainer(DockerImageName.parse("postgres:18.3"));
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+
+        registry.add("spring.datasource.primary.jdbc-url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.primary.username", postgres::getUsername);
+        registry.add("spring.datasource.primary.password", postgres::getPassword);
+
+        registry.add("spring.datasource.replica.jdbc-url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.replica.username", postgres::getUsername);
+        registry.add("spring.datasource.replica.password", postgres::getPassword);
     }
 }

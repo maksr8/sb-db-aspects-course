@@ -1,16 +1,39 @@
 services:
-  db:
-    image: postgres:18
-    container_name: taxi_postgres_container
+  primary:
+    image: bitnami/postgresql@sha256:7a695433df7728a4efa0c66310f4e9e71a37f3fbbc1bb179b8308896dff40a6c     #18.3
+    container_name: taxi_postgres_primary
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: taxi_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
+      POSTGRESQL_REPLICATION_MODE: master
+      POSTGRESQL_REPLICATION_USER: replicator
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: root
+      POSTGRESQL_DATABASE: taxi_db
+      POSTGRESQL_SYNCHRONOUS_COMMIT_MODE: on
+      POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS: 1
     volumes:
-      - postgres_data:/var/lib/postgresql
-    restart: always
+      - primary_data:/bitnami/postgresql
+
+  replica:
+    image: bitnami/postgresql@sha256:7a695433df7728a4efa0c66310f4e9e71a37f3fbbc1bb179b8308896dff40a6c
+    container_name: taxi_postgres_replica
+    ports:
+      - "5433:5432"
+    depends_on:
+      - primary
+    environment:
+      POSTGRESQL_REPLICATION_MODE: slave
+      POSTGRESQL_REPLICATION_USER: replicator
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_MASTER_HOST: primary
+      POSTGRESQL_MASTER_PORT_NUMBER: 5432
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: root
+    volumes:
+      - replica_data:/bitnami/postgresql
 
 volumes:
-  postgres_data:
+  primary_data:
+  replica_data:
